@@ -39,9 +39,9 @@ export abstract class Piece extends BaseObject {
       );
 
       color.convertSRGBToLinear();
-      // o.material = new MeshPhongMaterial({
-      //   color,
-      // });
+      o.material = new MeshPhongMaterial({
+        color,
+      });
     });
   }
 
