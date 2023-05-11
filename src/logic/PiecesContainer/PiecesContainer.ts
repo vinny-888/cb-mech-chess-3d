@@ -9,7 +9,7 @@ import { Piece } from "objects/Pieces/Piece/Piece";
 import { PieceChessPosition } from "objects/Pieces/Piece/types";
 import { Queen } from "objects/Pieces/Queen/Queen";
 import { Rook } from "objects/Pieces/Rook/Rook";
-import { Vector3 } from "three";
+import { Vector3, Euler, Quaternion } from "three";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 import { Pieces, PieceSet, PromotablePieces } from "./types";
 
@@ -41,7 +41,7 @@ export class PiecesContainer {
         color,
       });
 
-      this.setupPiecePosition(pawn, { row, column: i });
+      this.setupPiecePosition(pawn, { row, column: i }, color);
       pawns.push(pawn);
     }
     return pawns;
@@ -74,7 +74,7 @@ export class PiecesContainer {
       color,
     });
 
-    this.setupPiecePosition(rook, chessPosition);
+    this.setupPiecePosition(rook, chessPosition, color);
     return rook;
   }
 
@@ -105,7 +105,7 @@ export class PiecesContainer {
       color,
     });
 
-    this.setupPiecePosition(knight, chessPosition);
+    this.setupPiecePosition(knight, chessPosition, color);
 
     if (color === "b") {
       knight.body.quaternion.set(0, Math.PI, 0, 0);
@@ -141,9 +141,9 @@ export class PiecesContainer {
       color,
     });
 
-    this.setupPiecePosition(bishop, chessPosition);
+    this.setupPiecePosition(bishop, chessPosition, color);
 
-    bishop.body.quaternion.y = Math.PI / 3;
+    
 
     return bishop;
   }
@@ -173,7 +173,7 @@ export class PiecesContainer {
       color,
     });
 
-    this.setupPiecePosition(queen, position);
+    this.setupPiecePosition(queen, position, color);
 
     return queen;
   }
@@ -188,7 +188,7 @@ export class PiecesContainer {
       color,
     });
 
-    this.setupPiecePosition(king, { row, column });
+    this.setupPiecePosition(king, { row, column }, color);
 
     return [king];
   }
@@ -209,10 +209,22 @@ export class PiecesContainer {
 
   private setupPiecePosition(
     piece: Piece,
-    chessPosition: PieceChessPosition
+    chessPosition: PieceChessPosition,
+    color: PieceColor
   ): void {
     const initialPosition = this.getFieldPosition(chessPosition);
-    const pieceBody = piece.init(initialPosition, this.loader);
+
+    const pieceBody = piece.init(initialPosition, this.loader, color);
+
+    if(color == 'b'){
+      piece.body.quaternion.y = -piece.body.quaternion.y-20;
+    }
+
+    // const quaternion = new Quaternion();
+    // quaternion.setFromAxisAngle( new Vector3( 0, 1, 0 ), Math.PI / 2 );
+
+    // const vector = new Vector3( 1, 0, 0 );
+    // vector.applyQuaternion( quaternion );
 
     this.world.addBody(pieceBody);
   }

@@ -39,9 +39,9 @@ export abstract class Piece extends BaseObject {
       );
 
       color.convertSRGBToLinear();
-      o.material = new MeshPhongMaterial({
-        color,
-      });
+      // o.material = new MeshPhongMaterial({
+      //   color,
+      // });
     });
   }
 
@@ -94,7 +94,7 @@ export abstract class Piece extends BaseObject {
     this.body.position.z = z;
   }
 
-  init(initialPosition: Vector3, loader: GLTFLoader): Body {
+  init(initialPosition: Vector3, loader: GLTFLoader, color: PieceColor): Body {
     this.initModel(loader).then(() => {
       this.changeMaterial();
     });
@@ -102,7 +102,14 @@ export abstract class Piece extends BaseObject {
     this.createPsychicsBody(initialPosition);
 
     this.position.copy(initialPosition);
-    this.scale.set(15, 15, 15);
+    this.scale.set(0.75, 0.75, 0.75);
+    if(color == 'b'){
+      // this.rotation.y = Math.PI;
+      // var euler = new Euler(180,180,0);
+      // var quaternion = new Quaternion();
+      // quaternion.setFromEuler(euler);
+      // piece.rotation.setFromQuaternion( quaternion )
+    }
     return this.body;
   }
 
